@@ -4,8 +4,7 @@ CREATE DATABASE cosmeticos;
 
 CREATE TABLE marcas (
     id SERIAL PRIMARY KEY,
-    marca VARCHAR (100) NOT NULL,
-    founder VARCHAR(50) NOT NULL
+    name VARCHAR (100) NOT NULL
 );
 
 SELECT * FROM marcas;
@@ -18,13 +17,15 @@ CREATE TABLE cosmeticos (
     marca_id INTEGER REFERENCES marcas(id) ON DELETE CASCADE
 );
 
+ALTER TABLE cosmeticos ADD COLUMN photo TEXT;
+
 SELECT * FROM cosmeticos;
 
-INSERT INTO marcas (marca, founder) VALUES
-('Wella', 'Franz Ströher'),
-('Lola Cosmetics', 'Dione Vasconcellos'),
-('Creamy', 'Gabriel Beleze'),
-('Kiko Milano', 'Antonio Percassi');
+INSERT INTO marcas (name) VALUES
+('Wella'),
+('Lola Cosmetics'),
+('Creamy'),
+('Kiko Milano');
 
 INSERT INTO cosmeticos (type, price, amount, marca_id) VALUES
 ('Kit Wella Professionals Invigo Nutri-Enrich', 'R$382,00', '1 Litro', 1),

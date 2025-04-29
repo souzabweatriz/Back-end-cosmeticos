@@ -1,11 +1,13 @@
-const cosmeticoModel = require ("../models/cosmeticoModel");
+const cosmeticoModel = require("../models/cosmeticoModel")
 
 const getAllCosmeticos = async (req, res) => {
     try {
-        const cosmeticos = await cosmeticoModel.getCosmeticos();
-        res.json(cosmeticos);
+        const { type, price, amount } = req.query
+        const cosmeticos = await cosmeticoModel.getCosmeticos({type, price, amount});
+        return res.status(200).json(cosmeticos);
     } catch (error) {
-        res.status(400).json({error: "Erro ao buscar cosméticos"});
+        console.error("Erro ao buscar Cosméticos:", error);
+        res.status(400).json({ message: "Erro ao buscar Cosméticos" });
     }
 };
 
@@ -23,19 +25,20 @@ const getCosmeticos = async (req, res) => {
 
 const createCosmetico = async (req, res) =>{
     try {
-        const {type, price, amount} = req.body;
-        const newCosmetico = await cosmeticoModel.createCosmetico(type, price, amount);
-        res.status(201).json(newCosmetico)
+        const {type, price, amount, marca_id} = req.body;
+        const photo = req.file ? req.file.filename : null;
+        const newCosmetico = await cosmeticoModel.createCosmetico(type, price, amount, marca_id, photo);
+        res.status(201).json(newCosmetico);
     } catch (error) {
         console.log(error);
-        res.status(400).json({ message: "Erro ao criar Cosmético" });
+        res.status(400).json({message: "Erro ao criar Cosmético"})
     }
-};
+}
 
 const updateCosmetico = async (req, res) => {
     try {
-        const {type, price, amount} = req.body;
-        const updatedCosmetico = await cosmeticoModel.updateCosmetico(req.params.id, type, price, amount);
+        const {type, price, amount, photo, marca_id} = req.body;
+        const updatedCosmetico = await cosmeticoModel.updateCosmetico(req.params.id, type, price, amount, photo, marca_id);
         if(!updatedCosmetico){
             return res.status(404).json({message: "Cosmético não encontrado"})
         }
