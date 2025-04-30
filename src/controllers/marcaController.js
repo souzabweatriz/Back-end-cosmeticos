@@ -30,15 +30,17 @@ const createMarca = async (req,res) => {
     }
 };
 
-const updateMarca = async(req, res) => {
+const updateMarca = async (req, res) => {
     try {
         const updatedMarca = await marcaModel.updateMarca(req.params.id, req.body);
-        if(updatedMarca){
-            return res.status(404).json({message: "Marca não encontrada para atualizar"})
+        
+        if (!updatedMarca) {
+            return res.status(404).json({ message: "Marca não encontrada para atualizar" });
         }
+
         return res.status(200).json(updatedMarca);
     } catch (error) {
-        res.status(400).json({ message: "Erro ao atualizar Marca" });
+        res.status(400).json({ message: "Erro ao atualizar Marca", error: error.message });
     }
 };
 
