@@ -21,7 +21,7 @@ const exportCosmeticoPDF = async (req, res) => {
         doc.moveDown(0.5);
 
          //Add dados dos Cosméticos
-         cosmeticos.forEach((cosmetico) => {
+        cosmeticos.forEach((cosmetico) => {
             doc.text(
                 `${cosmetico.id} | ${cosmetico.type} |  ${cosmetico.price} | ${cosmetico.amount} | ${cosmetico.marca_id}`
             );

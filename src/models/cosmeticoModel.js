@@ -11,11 +11,15 @@ const getCosmeticosById = async (id) => {
 };
 
 const createCosmetico = async (type, price, amount, photo, marca_id) => {
-    const result = await pool.query(
-        "INSERT INTO cosmeticos (type, price, amount, photo, marca_id) VALUES ($1, $2, $3, $4, $5) RETURNING *", 
-        [type, price, amount, photo, marca_id]
-    );
-    return result.rows[0];
+    try {
+        const result = await pool.query(
+            "INSERT INTO cosmeticos (type, price, amount, photo, marca_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            [type, price, amount, photo, marca_id]
+        );
+        return result.rows[0];
+    } catch (error) {
+        throw new Error("Erro ao criar cosmético: " + error.message);
+    }
 };
 
 const updateCosmetico = async (id, type, price, amount, photo, marca_id) => {

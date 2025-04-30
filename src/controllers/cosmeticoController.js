@@ -23,17 +23,28 @@ const getCosmeticos = async (req, res) => {
     }
 };
 
-const createCosmetico = async (req, res) =>{
+const createCosmetico = async (req, res) => {
     try {
-        const {type, price, amount, marca_id} = req.body;
+        const { type, price, amount, marca_id } = req.body;
         const photo = req.file ? req.file.filename : null;
+
+        if (!type || !price || !amount || !marca_id) {
+            return res.status(400).json({ message: "Todos os campos obrigatórios devem ser preenchidos." });
+        }
+
         const newCosmetico = await cosmeticoModel.createCosmetico(type, price, amount, marca_id, photo);
-        res.status(201).json(newCosmetico);
+
+        res.status(201).json({
+            message: "Cosmético criado com sucesso!",
+            data: newCosmetico,
+        });
     } catch (error) {
-        console.log(error);
-        res.status(400).json({message: "Erro ao criar Cosmético"})
+        res.status(500).json({
+            message: "Erro ao criar cosmético.",
+            error: error.message,
+        });
     }
-}
+};
 
 const updateCosmetico = async (req, res) => {
     try {

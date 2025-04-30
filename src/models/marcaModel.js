@@ -1,32 +1,42 @@
 const pool = require("../config/database");
-const { updateCosmetico } = require("./cosmeticoModel");
 
-const getMarca = async(name) => {
-    if (!name){
+const getMarca = async (name) => {
+    if (!name) {
         const result = await pool.query(
-            `SELECT marcas.*, cosmeticos.type AS cosmetico_type, cosmeticos.price AS cosmetico_price, cosmeticos.amount AS cosmetico_amount
+            `SELECT 
+            marcas.*, 
+            cosmeticos.type AS cosmetico_type,
+            cosmeticos.price AS cosmetico_price, 
+            cosmeticos.amount AS cosmetico_amount
             FROM marcas
             LEFT JOIN cosmeticos ON marcas.id = cosmeticos.marca_id`
         );
         return result.rows;
     } else {
         const result = await pool.query(
-            `SELECT marcas.*, cosmeticos.type AS cosmetico_type, cosmeticos.price AS cosmetico_price, cosmeticos.amount AS cosmetico_amount
+            `SELECT 
+            marcas.*, 
+            cosmeticos.type AS cosmetico_type, 
+            cosmeticos.price AS cosmetico_price, 
+            cosmeticos.amount AS cosmetico_amount
             FROM marcas
             LEFT JOIN cosmeticos ON marcas.id = cosmeticos.marca_id
-            WHERE marcas.name ILIKE $1`, [`%${name}%`]
+            WHERE marcas.name ILIKE $1`
         );
         return result.rows;
     }
 };
-
 const getMarcaById = async (id) => {
     const result = await pool.query(
-        ` marcas.*, cosmeticos.type AS cosmetico_type, cosmeticos.price AS cosmetico_price, cosmeticos.amount AS cosmetico_amount
-          FROM marcas
-          LEFT JOIN cosmeticos ON marcas.id = cosmeticos.marca_id
-          WHERE marcas.id = $1, [id]
-        `
+        `SELECT 
+        marcas.*, 
+        cosmeticos.type AS cosmetico_type, 
+        cosmeticos.price AS cosmetico_price, 
+        cosmeticos.amount AS cosmetico_amount
+        FROM marcas
+        LEFT JOIN cosmeticos ON marcas.id = cosmeticos.marca_id
+        WHERE marcas.id = $1`,
+        [id]
     );
     return result.rows[0];
 };
@@ -41,9 +51,7 @@ const updateMarca = async (id, name) => {
 
 const createNewMarca = async (name) => {
     const result = await pool.query(
-        `
-        INSERT INTO marcas (name) VALUES ($1), RETURNING *
-        `
+        `INSERT INTO marcas (name) VALUES ($1) RETURNING *`,
         [name]
     );
     return result.rows[0];
@@ -59,4 +67,4 @@ const deleteMarca = async (id) => {
     return { message: "Marca deletada com sucesso." };
 };
 
-module.exports = {getMarca, getMarcaById, createNewMarca, updateMarca, deleteMarca}
+module.exports = { getMarca, getMarcaById, createNewMarca, updateMarca, deleteMarca }
