@@ -16,5 +16,5 @@
 
 ## Evidência 📽️
 
-#### Gravado, salvo no Repositório como Revisão-BACK
+#### Gravado, enviado no classroom
 
